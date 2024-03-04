@@ -6,26 +6,32 @@
 /*   By: ehedeman <ehedeman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:23:50 by ehedeman          #+#    #+#             */
-/*   Updated: 2024/02/23 16:38:15 by ehedeman         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:09:51 by ehedeman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int game_init(t_game *game)
+int	game_init(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
-		return (-2);
+		return (-7);
 	game->mlx_win = mlx_new_window(game->mlx, 3840, 2110, "so_long");
+	if (!game->mlx_win)
+		return (-7);
 	if (mlx_hook(game->mlx_win, 2, 1L << 0, key_handler, game) == 0)
-		return (0);
+		return (-10);
+	if (mlx_hook(game->mlx_win, 17, 1L << 0, close_window, game) == 0)
+		return (-10);
+	// if (mlx_mouse_hook(game->mlx_win, mouse_handler, game) == 0)
+	// 	return (-10);
 	game->message_height = 200;
 	game->message_width = 800;
 	game->message_addr = mlx_xpm_file_to_image(game->mlx, MESSAGE_PATH,
 			&game->message_width, &game->message_height);
 	if (!game->message_addr)
-		return (-2);
+		return (-7);
 	return (0);
 }
 
@@ -37,18 +43,18 @@ int	bckg_wall_item_init(t_game *game)
 	game->wall.addr = mlx_xpm_file_to_image(game->mlx, WALL_PATH,
 			&size, &size);
 	if (!game->wall.addr)
-		return (-2);
-	game->map.background_adress = mlx_xpm_file_to_image(game->mlx, BACKGROUND_PATH,
-			&game->win_width, &game->win_height);
+		return (-7);
+	game->map.background_adress = mlx_xpm_file_to_image(game->mlx,
+			BACKGROUND_PATH, &game->win_width, &game->win_height);
 	if (!game->map.background_adress)
-		return (-2);
+		return (-7);
 	game->item.width = 153;
-    game->item.height = 153;
-    game->item.addr = mlx_xpm_file_to_image(game->mlx, ITEM_PATH,
-            &game->item.width, &game->item.height);
-    if (!game->item.addr)
-		return (-2);
-    return (0);
+	game->item.height = 153;
+	game->item.addr = mlx_xpm_file_to_image(game->mlx, ITEM_PATH,
+			&game->item.width, &game->item.height);
+	if (!game->item.addr)
+		return (-7);
+	return (0);
 }
 
 int	init(t_game *game, char *filename)

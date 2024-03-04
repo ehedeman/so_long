@@ -6,7 +6,7 @@
 /*   By: ehedeman <ehedeman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:50:15 by ehedeman          #+#    #+#             */
-/*   Updated: 2024/02/23 13:21:59 by ehedeman         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:14:05 by ehedeman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	map_read(t_game *game, int fd, char buf[])
 		{
 			free(game->map.content);
 			close(fd);
-			return (-3);
+			return (-5);
 		}
 		else
 		{
@@ -59,14 +59,18 @@ int	map_init(char *filename, t_game *game)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (-3);
+		return (-5);
 	game->map.content = ft_calloc(1, 1);
 	if (!game->map.content)
+	{
+		close(fd);
 		return (-2);
+	}
 	ret = map_read(game, fd, buf);
 	if (ret < 0)
 		return (ret);
-	map_coordinates(game);
+	close(fd);
+	map_coordinates(game, 0, 0, 0);
 	get_map_width_and_height(game);
 	return (0);
 }

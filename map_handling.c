@@ -6,7 +6,7 @@
 /*   By: ehedeman <ehedeman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 12:15:28 by ehedeman          #+#    #+#             */
-/*   Updated: 2024/02/23 13:37:26 by ehedeman         ###   ########.fr       */
+/*   Updated: 2024/02/27 13:43:33 by ehedeman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,8 @@ void	set_coordinates(int *x, int *y, int i, int j)
 	*y = j;
 }
 
-void	map_coordinates(t_game *game)
+void	map_coordinates(t_game *game, int i, int j, int x)
 {
-	int	i;
-	int	j;
-	int	x;
-
-	i = 0;
-	j = 0;
-	x = 0;
 	while (game->map.content[i])
 	{
 		if (game->map.content[i] == 'E')
@@ -46,11 +39,11 @@ void	map_coordinates(t_game *game)
 	}
 }
 
-int	get_map_width_and_height(t_game *game)
+void	get_map_width_and_height(t_game *game)
 {
 	int	i;
 	int	j;
-	
+
 	i = 1;
 	j = 1;
 	while (game->map.content[i])
@@ -59,9 +52,8 @@ int	get_map_width_and_height(t_game *game)
 			j++;
 		i++;
 	}
-	game->map.width = (i - j + 1) / j; //newlines werden mitgezählt
+	game->map.width = (i - j + 1) / j;
 	game->map.height = j;
 	game->map.object_nbr = 0;
 	game->map.size = i;
-	return (0);
 }

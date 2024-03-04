@@ -6,7 +6,7 @@
 #    By: ehedeman <ehedeman@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 13:51:06 by ehedeman          #+#    #+#              #
-#    Updated: 2024/02/23 17:34:49 by ehedeman         ###   ########.fr        #
+#    Updated: 2024/03/04 12:11:07 by ehedeman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ SRC = 	so_long.c		\
 		objects.c		\
 		map_validation.c\
 		exit.c			\
-		wall.c
+		wall.c			\
+		possible_path.c
 		
 
 OBJS = $(SRC:.c=.o)
@@ -33,12 +34,12 @@ OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
 #SRC_K = kill.c
 
 CC = cc 
-CFLAGS = -Werror -Wall -Wextra -g #-fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -Werror -Wall -Wextra -g -fsanitize=address -fno-omit-frame-pointer
 
 LIBFT = libft.a
 LIB_PATH = ./libft/
 
-all: $(LIBFT) $(CLIENT) $(NAME) #$(KILL)
+all: $(LIBFT) $(CLIENT) $(NAME) #norm
 	@printf "\e[38;5;118mLibft.a Done :D\n"
 	@printf "\e[38;5;118mServer Done :D\n"
 	@printf "\e[38;5;118mClient Done :D\n"
@@ -72,4 +73,7 @@ leaks:
          --show-leak-kinds=all \
          --track-origins=yes ./so_long map.txt
 
-.PHONY: all clean re fclean leaks
+norm:
+	@norminette $(SRC) so_long.h
+
+.PHONY: all clean re fclean leaks norm

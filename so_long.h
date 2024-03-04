@@ -6,7 +6,7 @@
 /*   By: ehedeman <ehedeman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:01:52 by ehedeman          #+#    #+#             */
-/*   Updated: 2024/02/27 12:02:31 by ehedeman         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:08:46 by ehedeman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,17 @@
 #define EXIT_PATH1 "sprites/Exit_1.xpm"
 #define EXIT_PATH2 "sprites/Exit_2.xpm"
 #define XK_ESCAPE 65307
-
+#define MAP_STRING2 "111111111111111111\n"\
+                    "100000000000000001\n"\
+                    "1E0000000010000001\n"\
+                    "100000000011111111\n"\
+                    "100000000010000001\n"\
+                    "10000P000010000001\n"\
+                    "100000000010000001\n"\
+                    "100000000010000001\n"\
+                    "10000000001000C001\n"\
+                    "100000000010000001\n"\
+                    "111111111111111111"
 typedef struct s_player
 {
 	void	*addr1;
@@ -55,6 +65,7 @@ typedef struct s_map
 {
 	char		*content;
 	void		*background_adress;
+	int			possible_path;
 	int			size;
 	int			width;
 	int			height;
@@ -109,40 +120,41 @@ typedef struct s_game
 	t_map			map;
 	t_wall			wall;
 	t_exit			exit;
+	int				steps;
 }	t_game;
-
 //beginning functions
+void	errors(int index, t_game *game);
+int		correct_input(char *file);
 int		filetype(char *file);
-int		game_init(t_game *game);
-int		player_init(t_game *game);
+int		file_placement(char *file);
+int		set_to_zero(t_game *game);
 int		init(t_game *game, char *filename);
-int		bckg_wall_item_init(t_game *game);
 int		map_init(char *filename, t_game *game);
-int		error_handling(int index, t_game *game);
 int		map_read(t_game *game, int fd, char buf[]);
 int		map_join(t_game *game, char buf[], int fd);
-void	map_coordinates(t_game *game);
-void	set_coordinates(int *x, int *y, int j, int i);
-int		key_handler(int key, t_game *game);
+int		valid_map(t_game *game);
+int		split_map(t_game *game);
+int		check_borders(t_game *game, int i, int j, int x);
+int		map_shape(t_game *game, int i, int j);
+int		check_symbols(t_game *game, int i);
+void	get_map_width_and_height(t_game *game);
+void	map_coordinates(t_game *game, int i, int j, int x);
+int		game_init(t_game *game);
+int		player_init(t_game *game);
+void	set_player_coords_beginning(t_game *game);
+int		bckg_wall_item_init(t_game *game);
+int		exit_init(t_game *game);
+int		object_list_init(t_game *game, int i, int j);
 int		beginning_put_to_window(t_game *game);
+int		put_surrounding_wall(t_game *game);
+int		put_objects_exit(t_game *game);
+int		put_item(t_game *game);
+int		key_handler(int key, t_game *game);
+int 	close_window(t_game *game);
+int		change_coords_put_bckg(t_game *game, int up_or_down, int left_or_right);
 int		move_player(t_game *game, int up_or_down, int left_or_right,
 			int spritenbr);
-int		check_for_objects(t_game *game, int direction);
-int		get_map_width_and_height(t_game *game);
-void	set_player_coords_beginning(t_game *game);
-int		put_surrounding_wall(t_game *game);
-int		find_map_objects(t_game *game, int i, int j);
-int		beginning_put_objects_exit(t_game *game);
-int		put_objects_exit(t_game *game);
-int		object_list_init(t_game *game, int i, int j);
-void	put_item(t_game *game);
-int		set_coords_zero(t_game *game);
-int		check_borders(t_game *game, int i, int j, int x);
-int		valid_map(t_game *game);
-int		illegal_symbol(t_game *game, int i);
-int		map_shape(t_game *game, int i, int j);
-int		item_collected(t_game *game);
 int		exit_game(t_game *game);
-int		exit_init(t_game *game);
 int		exit_closed(t_game *game, int direction);
+void	item_collected(t_game *game);
 //end functions
